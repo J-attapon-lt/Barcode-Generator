@@ -289,6 +289,7 @@
             // บันทึกค่าไว้ที่ปุ่ม
             copyBtn.dataset.code = code;
             copyBtn.dataset.valid = isValid;
+            printBtn.dataset.valid = isValid; // เพิ่มการบันทึกค่าสถานะให้ปุ่ม Print
         }
 
         // ผูก Event ให้ทำงานเมื่อมีการพิมพ์ข้อความ
@@ -297,9 +298,9 @@
             document.getElementById(id).addEventListener('input', updateApp);
         });
 
-        // สั่ง Print
+        // สั่ง Print (เมื่อกดแล้วจะเช็คความถูกต้องก่อน)
         document.getElementById('printBtn').addEventListener('click', function() {
-            if(this.dataset.valid === 'true') window.print();
+            window.print(); // แก้ไขให้สามารถทำงานได้ทันทีถ้าปุ่มไม่ได้ถูก Disable
         });
 
         // สั่งคัดลอกรหัส
