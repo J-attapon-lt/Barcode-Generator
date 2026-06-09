@@ -9,14 +9,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- โหลดฟอนต์สำหรับหน้าจอและฟอนต์สำหรับตอนปริ้น -->
-    <link href="https://fonts.googleapis.com/css2?family=Tinos:wght@400;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- โหลดชุดไอคอน -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
         body { font-family: 'Noto Sans Thai', sans-serif; }
-        .font-serif { font-family: 'Tinos', 'Times New Roman', serif; }
         
         /* ตั้งค่ากระดาษสำหรับตอนสั่ง Print ให้เป็น A5 แนวนอนพอดีเป๊ะ */
         @media print {
@@ -28,7 +27,7 @@
                 position: absolute; left: 0; top: 0;
                 width: 100% !important; height: 98% !important;
                 margin: 0 !important; padding: 0 !important;
-                border: 1px solid black !important;
+                border: 2px solid black !important;
             }
             .label-container table td {
                 font-size: 14pt !important; padding: 10px 16px !important; border-color: black !important;
@@ -78,13 +77,17 @@
                         <i data-lucide="file-text" class="w-5 h-5 text-gray-500"></i> ข้อมูลในตารางฉลาก
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อสินค้า (Header)</label>
+                            <input type="text" id="inHeader" value="SMOKE SHEET RUBBER 3#" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-none focus:ring-2 text-center uppercase">
+                        </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">LOT NO.</label>
                             <input type="text" id="inLot" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-none focus:ring-2">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">PALLET NO.</label>
-                            <input type="text" id="inPal" value="1" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-none focus:ring-2">
+                            <input type="text" id="inPal" value="E0017" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-none focus:ring-2">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">NETT WT.</label>
@@ -96,11 +99,11 @@
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">CONTRACT NO</label>
-                            <input type="text" id="inCon" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-none focus:ring-2">
+                            <input type="text" id="inCon" value="J-attapon" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-none focus:ring-2">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อผู้ตรวจสอบ</label>
-                            <input type="text" id="inIns" value="สุคนทิพย์" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-none focus:ring-2">
+                            <input type="text" id="inIns" value="J-attapon" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-none focus:ring-2">
                         </div>
                     </div>
                 </div>
@@ -123,49 +126,51 @@
 
                     <!-- Label Canvas -->
                     <div class="flex-1 flex items-center justify-center bg-gray-200 rounded-lg p-4 md:p-8 border border-gray-300 print:bg-white print:border-none print:p-0 overflow-auto">
-                        <div class="label-container bg-white border border-black w-full max-w-2xl text-black flex flex-col font-serif print:w-[100%] print:h-[95vh] print:max-w-none print:border print:border-black print:mx-auto">
+                        <div class="label-container bg-white border-2 border-black w-full max-w-2xl text-black flex flex-col print:w-[100%] print:h-[95vh] print:max-w-none print:border-2 print:border-black print:mx-auto">
                             
-                            <!-- Header Blank Space -->
-                            <div class="h-16 md:h-20 w-full border-b border-black shrink-0 relative overflow-hidden"></div>
+                            <!-- Header Area -->
+                            <div class="h-16 md:h-20 w-full border-b border-black shrink-0 flex items-center justify-center text-lg md:text-xl font-bold uppercase tracking-wide">
+                                <span id="outHeader">SMOKE SHEET RUBBER 3#</span>
+                            </div>
 
                             <!-- Table Section -->
                             <table class="w-full border-collapse grow text-sm md:text-[15px]">
                                 <tbody>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase w-[35%] tracking-wide">PRODUCTION DATE</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase w-[40%] font-bold text-center tracking-wide">PRODUCTION DATE</td>
                                         <td id="outDate" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase tracking-wide">LOT NO.</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-center tracking-wide">LOT NO.</td>
                                         <td id="outLot" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase tracking-wide">PALLET NO.</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-center tracking-wide">PALLET NO.</td>
                                         <td id="outPal" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase tracking-wide">NETT WT.</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-center tracking-wide">NETT WT.</td>
                                         <td id="outNet" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase tracking-wide">GROSS WT.</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-center tracking-wide">GROSS WT.</td>
                                         <td id="outGro" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase tracking-wide">CONTRACT NO</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-center tracking-wide">CONTRACT NO</td>
                                         <td id="outCon" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                 </tbody>
                             </table>
 
                             <!-- Barcode and Signature Section -->
-                            <div class="flex justify-between items-end p-4 md:px-6 md:py-8 shrink-0 min-h-[140px] md:min-h-[180px]">
-                                <div class="w-[60%] flex flex-col justify-end">
-                                    <img id="barcodeImg" src="" alt="Barcode" class="h-20 md:h-28 object-contain object-left mix-blend-multiply hidden">
+                            <div class="flex w-full shrink-0 min-h-[140px] md:min-h-[160px]">
+                                <div class="w-[55%] border-r border-black flex flex-col justify-center items-center p-4">
+                                    <img id="barcodeImg" src="" alt="Barcode" class="h-20 md:h-28 object-contain mix-blend-multiply hidden">
                                     <div id="emptyBarcode" class="h-20 md:h-28 flex items-center text-xs text-red-500">(รอข้อมูลบาร์โค้ด)</div>
                                 </div>
-                                <div class="w-[40%] text-right text-sm md:text-base whitespace-nowrap mb-2 md:mb-4">
-                                    ผู้ตรวจสอบ........<span id="outIns" class="inline-block min-w-[80px] text-center"></span>........
+                                <div class="w-[45%] flex items-center justify-center p-4 text-sm md:text-base">
+                                    ผู้ตรวจสอบ........<span id="outIns" class="inline-block min-w-[60px] text-center"></span>........
                                 </div>
                             </div>
                         </div>
@@ -195,6 +200,7 @@
             const ven = document.getElementById('inVen').value.replace(/[^a-zA-Z0-9]/g, '');
             document.getElementById('inVen').value = ven;
 
+            const headerText = document.getElementById('inHeader').value;
             const lot = document.getElementById('inLot').value;
             const pal = document.getElementById('inPal').value;
             const net = document.getElementById('inNet').value;
@@ -221,6 +227,7 @@
             const isValid = code.length === 21 && !code.includes('_');
 
             // อัปเดตข้อมูลบนตารางฉลาก
+            document.getElementById('outHeader').innerHTML = headerText || '&nbsp;';
             document.getElementById('outDate').innerHTML = displayDate;
             document.getElementById('outLot').innerHTML = lot || '&nbsp;';
             document.getElementById('outPal').innerHTML = pal || '&nbsp;';
@@ -258,6 +265,7 @@
             const printBtn = document.getElementById('printBtn');
 
             if(isValid) {
+                // scale ปรับขนาดบาร์โค้ด, textyoffset เลื่อนข้อความตัวเลขลงมาด้านล่างนิดหน่อย
                 imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyoffset=5`;
                 imgEl.classList.remove('hidden');
                 emptyEl.classList.add('hidden');
@@ -284,7 +292,7 @@
         }
 
         // ผูก Event ให้ทำงานเมื่อมีการพิมพ์ข้อความ
-        const inputs = ['inMat', 'inDate', 'inVen', 'inLot', 'inPal', 'inNet', 'inGro', 'inCon', 'inIns'];
+        const inputs = ['inMat', 'inDate', 'inVen', 'inHeader', 'inLot', 'inPal', 'inNet', 'inGro', 'inCon', 'inIns'];
         inputs.forEach(id => {
             document.getElementById(id).addEventListener('input', updateApp);
         });
