@@ -266,7 +266,8 @@
 
             if(isValid) {
                 // เพิ่ม textsize ให้ใหญ่ขึ้น และ textyoffset เพื่อเว้นระยะจากเส้นบาร์โค้ด
-                imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyoffset=8&textsize=12`;
+               // imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyoffset=8&textsize=12`;
+                imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyon&dpi=200`;
                 imgEl.classList.remove('hidden');
                 emptyEl.classList.add('hidden');
                 warnEl.classList.add('hidden');
