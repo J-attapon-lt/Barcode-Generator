@@ -164,10 +164,10 @@
                             </table>
 
                             <!-- Barcode and Signature Section -->
-                            <div class="flex w-full shrink-0 min-h-[140px] md:min-h-[160px]">
+                            <div class="flex w-full shrink-0 min-h-[160px] md:min-h-[180px]">
                                 <div class="w-[55%] border-r border-black flex flex-col justify-center items-center p-4">
-                                    <img id="barcodeImg" src="" alt="Barcode" class="h-20 md:h-28 object-contain mix-blend-multiply hidden">
-                                    <div id="emptyBarcode" class="h-20 md:h-28 flex items-center text-xs text-red-500">(รอข้อมูลบาร์โค้ด)</div>
+                                    <img id="barcodeImg" src="" alt="Barcode" class="h-24 md:h-32 object-contain mix-blend-multiply hidden">
+                                    <div id="emptyBarcode" class="h-24 md:h-32 flex items-center text-xs text-red-500">(รอข้อมูลบาร์โค้ด)</div>
                                 </div>
                                 <div class="w-[45%] flex items-center justify-center p-4 text-sm md:text-base">
                                     ผู้ตรวจสอบ........<span id="outIns" class="inline-block min-w-[60px] text-center"></span>........
@@ -265,8 +265,8 @@
             const printBtn = document.getElementById('printBtn');
 
             if(isValid) {
-                // scale ปรับขนาดบาร์โค้ด, textyoffset เลื่อนข้อความตัวเลขลงมาด้านล่างนิดหน่อย
-                imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyoffset=5`;
+                // เพิ่ม textsize ให้ใหญ่ขึ้น และ textyoffset เพื่อเว้นระยะจากเส้นบาร์โค้ด
+                imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyoffset=8&textsize=12`;
                 imgEl.classList.remove('hidden');
                 emptyEl.classList.add('hidden');
                 warnEl.classList.add('hidden');
