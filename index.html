@@ -137,27 +137,27 @@
                             <table class="w-full border-collapse grow text-sm md:text-[15px]">
                                 <tbody>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase w-[40%] font-bold text-center tracking-wide">PRODUCTION DATE</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase w-[40%] font-bold text-left tracking-wide">PRODUCTION DATE</td>
                                         <td id="outDate" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-center tracking-wide">LOT NO.</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-left tracking-wide">LOT NO.</td>
                                         <td id="outLot" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-center tracking-wide">PALLET NO.</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-left tracking-wide">PALLET NO.</td>
                                         <td id="outPal" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-center tracking-wide">NETT WT.</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-left tracking-wide">NETT WT.</td>
                                         <td id="outNet" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-center tracking-wide">GROSS WT.</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-left tracking-wide">GROSS WT.</td>
                                         <td id="outGro" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-center tracking-wide">CONTRACT NO</td>
+                                        <td class="border-b border-r border-black px-4 py-3 uppercase font-bold text-left tracking-wide">CONTRACT NO</td>
                                         <td id="outCon" class="border-b border-black px-4 py-3 text-center">&nbsp;</td>
                                     </tr>
                                 </tbody>
@@ -166,8 +166,8 @@
                             <!-- Barcode and Signature Section -->
                             <div class="flex w-full shrink-0 min-h-[160px] md:min-h-[180px]">
                                 <div class="w-[55%] border-r border-black flex flex-col justify-center items-center p-4">
-                                    <img id="barcodeImg" src="" alt="Barcode" class="h-24 md:h-32 object-contain mix-blend-multiply hidden">
-                                    <div id="emptyBarcode" class="h-24 md:h-32 flex items-center text-xs text-red-500">(รอข้อมูลบาร์โค้ด)</div>
+                                    <img id="barcodeImg" src="" alt="Barcode" class="h-28 md:h-36 object-contain mix-blend-multiply hidden">
+                                    <div id="emptyBarcode" class="h-28 md:h-36 flex items-center text-xs text-red-500">(รอข้อมูลบาร์โค้ด)</div>
                                 </div>
                                 <div class="w-[45%] flex items-center justify-center p-4 text-sm md:text-base">
                                     ผู้ตรวจสอบ........<span id="outIns" class="inline-block min-w-[60px] text-center"></span>........
@@ -265,9 +265,8 @@
             const printBtn = document.getElementById('printBtn');
 
             if(isValid) {
-                // เพิ่ม textsize ให้ใหญ่ขึ้น และ textyoffset เพื่อเว้นระยะจากเส้นบาร์โค้ด
-               imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyonset=8&textsize=12&&dpi=200`;
-
+                // เพิ่ม textyoffset จาก 8 เป็น 18 เพื่อให้ตัวเลขเว้นระยะห่างลงมาด้านล่างมากขึ้น (เหมือนเว้นบรรทัด)
+                imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyonset=8&textsize=12&&dpi=200`;
                 imgEl.classList.remove('hidden');
                 emptyEl.classList.add('hidden');
                 warnEl.classList.add('hidden');
