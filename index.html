@@ -16,6 +16,57 @@
     
     <style>
         body { font-family: 'Noto Sans Thai', sans-serif; }
+        .official-card {
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.official-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 55%, #047857 100%);
+    color: white;
+    box-shadow: 0 14px 35px rgba(15, 23, 42, 0.18);
+}
+
+.section-title-icon {
+    background: linear-gradient(135deg, #1d4ed8, #047857);
+    color: white;
+    border-radius: 10px;
+    padding: 6px;
+}
+
+.input-official {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    transition: all 0.2s ease;
+}
+
+.input-official:focus {
+    background: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.label-preview-bg {
+    background:
+        linear-gradient(135deg, rgba(15, 23, 42, 0.08), rgba(37, 99, 235, 0.08)),
+        repeating-linear-gradient(
+            45deg,
+            #e2e8f0,
+            #e2e8f0 10px,
+            #f1f5f9 10px,
+            #f1f5f9 20px
+        );
+}
+
+.label-container {
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+}
+
+.system-badge {
+    background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.25);
+}
         
         /* ตั้งค่ากระดาษสำหรับตอนสั่ง Print ให้เป็น A5 แนวนอนพอดีเป๊ะ */
         @media print {
@@ -37,14 +88,31 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 p-4 md:p-8 min-h-screen">
+<body class="min-h-screen p-4 md:p-8 bg-gradient-to-br from-slate-100 via-blue-50 to-emerald-50">
 
     <div class="max-w-5xl mx-auto space-y-6">
         <!-- Header -->
-        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex items-center justify-between print:hidden">
-            <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                <i data-lucide="hash" class="text-blue-600"></i> โปรแกรมสร้างบาร์โค้ด 21 หลัก
-            </h1>
+        <div class="official-header rounded-2xl p-6 border border-blue-900/20 flex flex-col md:flex-row md:items-center md:justify-between gap-4 print:hidden">
+    <div>
+        <div class="flex items-center gap-3">
+            <div class="bg-white/15 rounded-xl p-3">
+                <i data-lucide="barcode" class="text-white w-7 h-7"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold tracking-tight">
+                    โปรแกรมสร้างบาร์โค้ด 21 หลัก
+                </h1>
+                <p class="text-blue-100 text-sm mt-1">
+                    Official Product Label & Barcode Printing System
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="system-badge rounded-xl px-4 py-3 text-sm text-blue-50">
+        <div class="font-semibold">LABEL CONTROL</div>
+        <div class="text-xs opacity-90">A5 Landscape Format</div>
+    </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -72,7 +140,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="official-card rounded-2xl p-6">
                     <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                         <i data-lucide="file-text" class="w-5 h-5 text-gray-500"></i> ข้อมูลในตารางฉลาก
                     </h2>
