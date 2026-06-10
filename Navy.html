@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21-Digit Barcode Generator</title>
+    
+    <!-- Load Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body { 
+            font-family: 'Inter', 'Noto Sans Thai', sans-serif; 
+        }
+        
+        /* A5 Landscape Print Settings (Always clean B&W for scanners) */
+        @media print {
+            @page { size: A5 landscape; margin: 10mm; }
+            body * { visibility: hidden; }
+            .print\:hidden { display: none !important; }
+            .label-container, .label-container * { visibility: visible; }
+            .label-container {
+                position: absolute; left: 0; top: 0;
+                width: 100% !important; height: 98% !important;
+                margin: 0 !important; padding: 0 !important;
+                border: 2px solid black !important;
+                background-color: white !important;
+                color: black !important;
+            }
+            .label-container table td {
+                font-size: 14pt !important; padding: 10px 16px !important; border-color: black !important;
+            }
+            .label-container .text-right { font-size: 14pt !important; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <div class="max-w-6xl mx-auto w-full p-4 md:p-8 space-y-6 grow">
+        
+        <!-- Header Section with Executive Slate/Indigo Gradient -->
+        <div class="bg-gradient-to-r from-slate-800 to-indigo-950 rounded-2xl shadow-xl p-6 border border-slate-700/50 flex flex-col sm:flex-row sm:items-center sm:justify-between print:hidden gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-500/10 p-2.5 rounded-xl border border-indigo-500/30">
+                    <i data-lucide="hash" class="text-indigo-400 w-7 h-7"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-wide text-white">21-Digit Barcode Generator</h1>
+                    <p class="text-xs text-slate-400 mt-0.5">Professional Inventory & Logistics Labeling System</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2.5 text-sm bg-slate-900/60 backdrop-blur px-4 py-2 rounded-xl border border-slate-700/40 self-start sm:self-auto">
+                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span class="text-slate-300">Developer: <strong class="text-white font-semibold">J-attapon</strong></span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Left Column: Input Form (Elegant slate-800 backdrop) -->
+            <div class="lg:col-span-5 space-y-6 print:hidden">
+                
+                <!-- Barcode Parameters Card -->
+                <div class="bg-slate-800/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border border-slate-700/50">
+                    <h2 class="text-md font-semibold text-white mb-4 flex items-center gap-2 pb-3 border-b border-slate-700">
+                        <i data-lucide="settings" class="w-5 h-5 text-indigo-400"></i> Barcode Specifications
+                    </h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Material Code (9 Digits)</label>
+                            <input type="text" id="inMat" maxlength="9" value="101000021" class="w-full bg-slate-900/90 text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all font-mono tracking-widest text-lg">
+                            <p id="matError" class="text-xs text-rose-400 mt-1.5 flex items-center gap-1 hidden">
+                                <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> Must be exactly 9 alphanumeric characters.
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Production Date</label>
+                            <input type="date" id="inDate" class="w-full bg-slate-900/90 text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Vendor Code (6 Digits)</label>
+                            <input type="text" id="inVen" maxlength="6" value="300285" class="w-full bg-slate-900/90 text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all font-mono tracking-widest text-lg">
+                            <p id="venError" class="text-xs text-rose-400 mt-1.5 flex items-center gap-1 hidden">
+                                <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> Must be exactly 6 alphanumeric characters.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Label Details Card -->
+                <div class="bg-slate-800/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border border-slate-700/50">
+                    <h2 class="text-md font-semibold text-white mb-4 flex items-center gap-2 pb-3 border-b border-slate-700">
+                        <i data-lucide="file-text" class="w-5 h-5 text-indigo-400"></i> Label Documentation
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Product Header / Description</label>
+                            <input type="text" id="inHeader" value="SMOKE SHEET RUBBER 3#" class="w-full bg-slate-900/90 text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all text-center uppercase font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Lot No.</label>
+                            <input type="text" id="inLot" placeholder="e.g. 202606001" class="w-full bg-slate-900/90 text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Pallet No.</label>
+                            <input type="text" id="inPal" value="E0017" class="w-full bg-slate-900/90 text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Nett Wt.</label>
+                            <input type="text" id="inNet" value="1,260.00" class="w-full bg-slate-900/90 text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Gross Wt.</label>
+                            <input type="text" id="inGro" value="1,386.00" class="w-full bg-slate-900/90 text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Contract No.</label>
+                            <input type="text" id="inCon" value="J-attapon" class="w-full bg-slate-900/90 text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Inspector Name</label>
+                            <input type="text" id="inIns" value="J-attapon" class="w-full bg-slate-900/90 text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Interactive Print Preview -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="bg-slate-800/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border border-slate-700/50 h-full flex flex-col justify-between">
+                    
+                    <!-- Top Controller Panel -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 print:hidden gap-4 pb-4 border-b border-slate-700/50">
+                        <div>
+                            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i data-lucide="eye" class="text-indigo-400 w-5 h-5"></i> A5 Print Preview
+                            </h2>
+                            <p class="text-xs text-slate-400 mt-0.5">Live alignment and formatting visualization</p>
+                        </div>
+                        <div class="flex gap-2 w-full sm:w-auto">
+                            <button id="copyBtn" class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-slate-700 text-slate-200 hover:bg-slate-600 border border-slate-600">
+                                <i data-lucide="copy" class="w-4 h-4"></i> <span id="copyText">Copy Code</span>
+                            </button>
+                            <button id="printBtn" class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 shadow-lg shadow-indigo-500/20">
+                                <i data-lucide="printer" class="w-4.5 h-4.5"></i> Print Label
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Immersive Mockup Canvas Container -->
+                    <div class="flex-1 flex items-center justify-center bg-slate-900 rounded-xl p-4 md:p-6 border border-slate-700/30 print:bg-white print:border-none print:p-0 overflow-auto">
+                        
+                        <!-- Physical Label Mockup Card (With sleek drop-shadow for desktop view) -->
+                        <div class="label-container bg-white border-2 border-black w-full max-w-2xl text-black flex flex-col shadow-2xl print:shadow-none print:border-2 print:border-black print:mx-auto">
+                            
+                            <!-- Header Area with centralized text -->
+                            <div class="h-16 md:h-20 w-full border-b-2 border-black shrink-0 flex items-center justify-center text-lg md:text-xl font-bold uppercase tracking-wide">
+                                <span id="outHeader">SMOKE SHEET RUBBER 3#</span>
+                            </div>
+
+                            <!-- Industrial Table Section -->
+                            <table class="w-full border-collapse grow text-sm md:text-[15px]">
+                                <tbody>
+                                    <tr class="h-10 md:h-12">
+                                        <td class="border-b-2 border-r-2 border-black px-4 py-2 uppercase w-[40%] font-bold text-left tracking-wider">PRODUCTION DATE</td>
+                                        <td id="outDate" class="border-b-2 border-black px-4 py-2 text-center font-semibold text-base">&nbsp;</td>
+                                    </tr>
+                                    <tr class="h-10 md:h-12">
+                                        <td class="border-b-2 border-r-2 border-black px-4 py-2 uppercase font-bold text-left tracking-wider">LOT NO.</td>
+                                        <td id="outLot" class="border-b-2 border-black px-4 py-2 text-center font-semibold text-base">&nbsp;</td>
+                                    </tr>
+                                    <tr class="h-10 md:h-12">
+                                        <td class="border-b-2 border-r-2 border-black px-4 py-2 uppercase font-bold text-left tracking-wider">PALLET NO.</td>
+                                        <td id="outPal" class="border-b-2 border-black px-4 py-2 text-center font-semibold text-base">&nbsp;</td>
+                                    </tr>
+                                    <tr class="h-10 md:h-12">
+                                        <td class="border-b-2 border-r-2 border-black px-4 py-2 uppercase font-bold text-left tracking-wider">NETT WT.</td>
+                                        <td id="outNet" class="border-b-2 border-black px-4 py-2 text-center font-semibold text-base">&nbsp;</td>
+                                    </tr>
+                                    <tr class="h-10 md:h-12">
+                                        <td class="border-b-2 border-r-2 border-black px-4 py-2 uppercase font-bold text-left tracking-wider">GROSS WT.</td>
+                                        <td id="outGro" class="border-b-2 border-black px-4 py-2 text-center font-semibold text-base">&nbsp;</td>
+                                    </tr>
+                                    <tr class="h-10 md:h-12">
+                                        <td class="border-b-2 border-r-2 border-black px-4 py-2 uppercase font-bold text-left tracking-wider">CONTRACT NO</td>
+                                        <td id="outCon" class="border-b-2 border-black px-4 py-2 text-center font-semibold text-base">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Barcode and Sign-off Area -->
+                            <div class="flex w-full shrink-0 min-h-[160px] md:min-h-[180px]">
+                                <div class="w-[55%] border-r-2 border-black flex flex-col justify-center items-center p-4">
+                                    <img id="barcodeImg" src="" alt="Barcode" class="h-24 md:h-32 object-contain mix-blend-multiply hidden">
+                                    <div id="emptyBarcode" class="h-24 md:h-32 flex items-center text-xs text-rose-600 font-medium">(Waiting for valid barcode parameters)</div>
+                                </div>
+                                <div class="w-[45%] flex items-center justify-center p-4 text-sm md:text-base font-semibold tracking-wide">
+                                    INSPECTOR........<span id="outIns" class="inline-block min-w-[70px] text-center border-b border-dotted border-black"></span>........
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Alert Message Panel (Clean Red Theme) -->
+                    <div id="warningMsg" class="mt-5 p-4 bg-rose-500/10 text-rose-200 rounded-xl border border-rose-500/20 flex items-start gap-3 text-sm print:hidden">
+                        <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 text-rose-400"></i>
+                        <div>
+                            <p class="font-bold text-white mb-0.5">Barcode Parameters Incomplete</p>
+                            <p class="text-slate-300">Ensure the Material Code has exactly 9 digits, a Production Date is selected, and the Vendor Code has exactly 6 digits.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Credit -->
+    <footer class="mt-8 text-center text-xs text-slate-500 border-t border-slate-800/80 py-6 print:hidden w-full bg-slate-950/40 backdrop-blur-sm">
+        <p>© 2026 21-Digit Barcode Generator | System Developed & Maintained by <span class="font-semibold text-slate-300">J-attapon</span></p>
+    </footer>
+
+    <!-- Interactive JS Core Logic -->
+    <script>
+        function updateApp() {
+            // Get values from Inputs
+            const mat = document.getElementById('inMat').value.replace(/[^a-zA-Z0-9]/g, '');
+            document.getElementById('inMat').value = mat;
+            const date = document.getElementById('inDate').value;
+            const ven = document.getElementById('inVen').value.replace(/[^a-zA-Z0-9]/g, '');
+            document.getElementById('inVen').value = ven;
+
+            const headerText = document.getElementById('inHeader').value;
+            const lot = document.getElementById('inLot').value;
+            const pal = document.getElementById('inPal').value;
+            const net = document.getElementById('inNet').value;
+            const gro = document.getElementById('inGro').value;
+            const con = document.getElementById('inCon').value;
+            const ins = document.getElementById('inIns').value;
+
+            // Date structure parsing for standard YYMMDD barcode formats
+            let datePart = '000000';
+            let displayDate = '&nbsp;';
+            if (date) {
+                const d = new Date(date);
+                const yy = d.getFullYear().toString().slice(-2);
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                datePart = `${yy}${mm}${dd}`;
+                displayDate = date.replace(/-/g, '/');
+            }
+
+            // Code creation and length guard check
+            const matPart = mat.padEnd(9, '_').slice(0, 9);
+            const venPart = ven.padEnd(6, '_').slice(0, 6);
+            const code = `${matPart}${datePart}${venPart}`;
+            const isValid = code.length === 21 && !code.includes('_');
+
+            // Set preview text variables
+            document.getElementById('outHeader').innerHTML = headerText || '&nbsp;';
+            document.getElementById('outDate').innerHTML = displayDate;
+            document.getElementById('outLot').innerHTML = lot || '&nbsp;';
+            document.getElementById('outPal').innerHTML = pal || '&nbsp;';
+            document.getElementById('outNet').innerHTML = net ? `${net} KGS.` : '&nbsp;';
+            document.getElementById('outGro').innerHTML = gro ? `${gro} KGS.` : '&nbsp;';
+            document.getElementById('outCon').innerHTML = con || '&nbsp;';
+          document.getElementById('outIns').innerHTML = ins;
+
+            // Material code error UI highlights
+            const inMatEl = document.getElementById('inMat');
+            const matErrEl = document.getElementById('matError');
+            if(mat.length !== 9 && mat.length > 0) {
+                inMatEl.classList.add('border-rose-500', 'focus:ring-rose-500');
+                matErrEl.classList.remove('hidden');
+            } else {
+                inMatEl.classList.remove('border-rose-500', 'focus:ring-rose-500');
+                matErrEl.classList.add('hidden');
+            }
+
+            // Vendor code error UI highlights
+            const inVenEl = document.getElementById('inVen');
+            const venErrEl = document.getElementById('venError');
+            if(ven.length !== 6 && ven.length > 0) {
+                inVenEl.classList.add('border-rose-500', 'focus:ring-rose-500');
+                venErrEl.classList.remove('hidden');
+            } else {
+                inVenEl.classList.remove('border-rose-500', 'focus:ring-rose-500');
+                venErrEl.classList.add('hidden');
+            }
+
+            // UI Button and barcode status management
+            const imgEl = document.getElementById('barcodeImg');
+            const emptyEl = document.getElementById('emptyBarcode');
+            const warnEl = document.getElementById('warningMsg');
+            const copyBtn = document.getElementById('copyBtn');
+            const printBtn = document.getElementById('printBtn');
+
+            if(isValid) {
+                imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyoffset=18&textsize=12`;
+                imgEl.classList.remove('hidden');
+                emptyEl.classList.add('hidden');
+                warnEl.classList.add('hidden');
+
+                copyBtn.disabled = false;
+                copyBtn.className = 'flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-slate-700 text-slate-200 hover:bg-slate-600 border border-slate-600 cursor-pointer print:hidden';
+                
+                printBtn.disabled = false;
+                printBtn.className = 'flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 shadow-lg shadow-indigo-500/20 cursor-pointer print:hidden';
+            } else {
+                imgEl.classList.add('hidden');
+                emptyEl.classList.remove('hidden');
+                warnEl.classList.remove('hidden');
+
+                copyBtn.disabled = true;
+                copyBtn.className = 'flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-slate-800 text-slate-600 border border-slate-800 cursor-not-allowed print:hidden';
+                
+                printBtn.disabled = true;
+                printBtn.className = 'flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide bg-slate-800 text-slate-600 border border-slate-800 cursor-not-allowed print:hidden';
+            }
+
+            // Save raw data keys inside DOM nodes
+            copyBtn.dataset.code = code;
+            copyBtn.dataset.valid = isValid;
+            printBtn.dataset.valid = isValid;
+        }
+
+        // Dynamically bind to inputs to prevent slow rendering
+        const inputs = ['inMat', 'inDate', 'inVen', 'inHeader', 'inLot', 'inPal', 'inNet', 'inGro', 'inCon', 'inIns'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', updateApp);
+        });
+
+        // Trigger printing page layout
+        document.getElementById('printBtn').addEventListener('click', function() {
+            if(this.dataset.valid === 'true') {
+                window.print();
+            }
+        });
+
+        // Clipboard management action
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            if(this.dataset.valid === 'true') {
+                navigator.clipboard.writeText(this.dataset.code);
+                const copyText = document.getElementById('copyText');
+                copyText.innerText = 'Copied!';
+                this.classList.remove('text-slate-200', 'bg-slate-700', 'hover:bg-slate-600', 'border-slate-600');
+                this.classList.add('text-emerald-400', 'bg-emerald-500/10', 'border-emerald-500/30');
+                
+                setTimeout(() => {
+                    copyText.innerText = 'Copy Code';
+                    this.classList.add('text-slate-200', 'bg-slate-700', 'hover:bg-slate-600', 'border-slate-600');
+                    this.classList.remove('text-emerald-400', 'bg-emerald-500/10', 'border-emerald-500/30');
+                }, 2000);
+            }
+        });
+
+      
