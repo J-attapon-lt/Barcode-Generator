@@ -9,13 +9,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- โหลดฟอนต์สำหรับหน้าจอและฟอนต์สำหรับตอนปริ้น -->
-    <link href="https://fonts.googleapis.com/css2?family=Thai'Sarabun:ital,wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- โหลดชุดไอคอน -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        body { font-family: "Sarabun", sans-serif;' }
+        body { font-family: "Sarabun", sans-serif; }
         .official-card {
     background: rgba(255, 255, 255, 0.96);
     border: 1px solid rgba(148, 163, 184, 0.35);
@@ -187,9 +186,12 @@
 </span>
                         <div class="flex gap-2">
                             <button id="copyBtn" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200">
-                              <button id="printBtn" class="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold transition-all bg-gradient-to-r from-blue-700 to-emerald-700 text-white hover:from-blue-800 hover:to-emerald-800 shadow-md">
-                                <i data-lucide="printer" class="w-4 h-4"></i> พิมพ์บาร์โค้ด
-                            </button>
+    <i data-lucide="copy" class="w-4 h-4"></i> คัดลอกรหัส
+</button>
+
+<button id="printBtn" class="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold transition-all bg-gradient-to-r from-blue-700 to-emerald-700 text-white hover:from-blue-800 hover:to-emerald-800 shadow-md">
+    <i data-lucide="printer" class="w-4 h-4"></i> พิมพ์บาร์โค้ด
+</button>
                         </div>
                     </div>
 
@@ -263,139 +265,147 @@
         <p>© 2026 21-Digit Barcode Generator | System Developed & Maintained by <span class="font-semibold text-gray-600">J-attapon</span></p>
     </footer>
     <!-- JavaScript Logic -->
-    <script>
-        function updateApp() {
-            // ดึงค่าจาก Input
-            const mat = document.getElementById('inMat').value.replace(/[^a-zA-Z0-9]/g, '');
-            document.getElementById('inMat').value = mat;
-            const date = document.getElementById('inDate').value;
-            const ven = document.getElementById('inVen').value.replace(/[^a-zA-Z0-9]/g, '');
-            document.getElementById('inVen').value = ven;
+               <script>
+    function updateApp() {
+        const mat = document.getElementById('inMat').value.replace(/[^a-zA-Z0-9]/g, '');
+        document.getElementById('inMat').value = mat;
 
-            const headerText = document.getElementById('inHeader').value;
-            const lot = document.getElementById('inLot').value;
-            const pal = document.getElementById('inPal').value;
-            const net = document.getElementById('inNet').value;
-            const gro = document.getElementById('inGro').value;
-            const con = document.getElementById('inCon').value;
-            const ins = document.getElementById('inIns').value;
+        const date = document.getElementById('inDate').value;
 
-            // จัดการวันที่
-            let datePart = '000000';
-            let displayDate = '&nbsp;';
-            if (date) {
-                const d = new Date(date);
-                const yy = d.getFullYear().toString().slice(-2);
-                const mm = String(d.getMonth() + 1).padStart(2, '0');
-                const dd = String(d.getDate()).padStart(2, '0');
-                datePart = `${yy}${mm}${dd}`;
-                displayDate = date.replace(/-/g, '/');
-            }
+        const ven = document.getElementById('inVen').value.replace(/[^a-zA-Z0-9]/g, '');
+        document.getElementById('inVen').value = ven;
 
-            // สร้างรหัสและตรวจสอบ
-            const matPart = mat.padEnd(9, '_').slice(0, 9);
-            const venPart = ven.padEnd(6, '_').slice(0, 6);
-            const code = `${matPart}${datePart}${venPart}`;
-            const isValid = code.length === 21 && !code.includes('_');
+        const headerText = document.getElementById('inHeader').value;
+        const lot = document.getElementById('inLot').value;
+        const pal = document.getElementById('inPal').value;
+        const net = document.getElementById('inNet').value;
+        const gro = document.getElementById('inGro').value;
+        const con = document.getElementById('inCon').value;
+        const ins = document.getElementById('inIns').value;
 
-            // อัปเดตข้อมูลบนตารางฉลาก
-            document.getElementById('outHeader').innerHTML = headerText || '&nbsp;';
-            document.getElementById('outDate').innerHTML = displayDate;
-            document.getElementById('outLot').innerHTML = lot || '&nbsp;';
-            document.getElementById('outPal').innerHTML = pal || '&nbsp;';
-            document.getElementById('outNet').innerHTML = net ? `${net} KGS.` : '&nbsp;';
-            document.getElementById('outGro').innerHTML = gro ? `${gro} KGS.` : '&nbsp;';
-            document.getElementById('outCon').innerHTML = con || '&nbsp;';
-            document.getElementById('outIns').innerHTML = ins;
+        let datePart = '000000';
+        let displayDate = '&nbsp;';
 
-            // แจ้งเตือน Error กรอกไม่ครบ
-            const inMatEl = document.getElementById('inMat');
-            const matErrEl = document.getElementById('matError');
-            if(mat.length !== 9) {
-                inMatEl.classList.add('border-red-300', 'focus:ring-red-500');
-                matErrEl.classList.remove('hidden');
-            } else {
-                inMatEl.classList.remove('border-red-300', 'focus:ring-red-500');
-                matErrEl.classList.add('hidden');
-            }
-
-            const inVenEl = document.getElementById('inVen');
-            const venErrEl = document.getElementById('venError');
-            if(ven.length !== 6) {
-                inVenEl.classList.add('border-red-300', 'focus:ring-red-500');
-                venErrEl.classList.remove('hidden');
-            } else {
-                inVenEl.classList.remove('border-red-300', 'focus:ring-red-500');
-                venErrEl.classList.add('hidden');
-            }
-
-            // จัดการปุ่มและบาร์โค้ด
-            const imgEl = document.getElementById('barcodeImg');
-            const emptyEl = document.getElementById('emptyBarcode');
-            const warnEl = document.getElementById('warningMsg');
-            const copyBtn = document.getElementById('copyBtn');
-            const printBtn = document.getElementById('printBtn');
-
-            if(isValid) {
-                // เพิ่ม textyoffset จาก 8 เป็น 18 เพื่อให้ตัวเลขเว้นระยะห่างลงมาด้านล่างมากขึ้น (เหมือนเว้นบรรทัด)
-                imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyonset=8&textsize=12&dpi=200`;
-               // imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyonset=8&textsize=12&&dpi=200`;
-                imgEl.classList.remove('hidden');
-                emptyEl.classList.add('hidden');
-                warnEl.classList.add('hidden');
-
-                copyBtn.disabled = false;
-                copyBtn.className = 'flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 print:hidden';
-                printBtn.disabled = false;
-                printBtn.className = 'flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 print:hidden';
-            } else {
-                imgEl.classList.add('hidden');
-                emptyEl.classList.remove('hidden');
-                warnEl.classList.remove('hidden');
-
-                copyBtn.disabled = true;
-                copyBtn.className = 'flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-gray-100 text-gray-400 cursor-not-allowed print:hidden';
-                printBtn.disabled = true;
-                printBtn.className = 'flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors bg-gray-100 text-gray-400 cursor-not-allowed print:hidden';
-            }
-
-            // บันทึกค่าไว้ที่ปุ่ม
-            copyBtn.dataset.code = code;
-            copyBtn.dataset.valid = isValid;
-            printBtn.dataset.valid = isValid; // เพิ่มการบันทึกค่าสถานะให้ปุ่ม Print
+        if (date) {
+            const [yyyy, mm, dd] = date.split('-');
+            const yy = yyyy.slice(-2);
+            datePart = `${yy}${mm}${dd}`;
+            displayDate = `${yyyy}/${mm}/${dd}`;
         }
 
-        // ผูก Event ให้ทำงานเมื่อมีการพิมพ์ข้อความ
-        const inputs = ['inMat', 'inDate', 'inVen', 'inHeader', 'inLot', 'inPal', 'inNet', 'inGro', 'inCon', 'inIns'];
-        inputs.forEach(id => {
-            document.getElementById(id).addEventListener('input', updateApp);
-        });
+        const matPart = mat.padEnd(9, '_').slice(0, 9);
+        const venPart = ven.padEnd(6, '_').slice(0, 6);
+        const code = `${matPart}${datePart}${venPart}`;
+        const isValid = code.length === 21 && !code.includes('_');
 
-        // สั่ง Print (เมื่อกดแล้วจะเช็คความถูกต้องก่อน)
-        document.getElementById('printBtn').addEventListener('click', function() {
-            window.print(); // แก้ไขให้สามารถทำงานได้ทันทีถ้าปุ่มไม่ได้ถูก Disable
-        });
+        document.getElementById('outHeader').innerHTML = headerText || '&nbsp;';
+        document.getElementById('outDate').innerHTML = displayDate;
+        document.getElementById('outLot').innerHTML = lot || '&nbsp;';
+        document.getElementById('outPal').innerHTML = pal || '&nbsp;';
+        document.getElementById('outNet').innerHTML = net ? `${net} KGS.` : '&nbsp;';
+        document.getElementById('outGro').innerHTML = gro ? `${gro} KGS.` : '&nbsp;';
+        document.getElementById('outCon').innerHTML = con || '&nbsp;';
+        document.getElementById('outIns').innerHTML = ins || '';
 
-        // สั่งคัดลอกรหัส
-        document.getElementById('copyBtn').addEventListener('click', function() {
-            if(this.dataset.valid === 'true') {
-                navigator.clipboard.writeText(this.dataset.code);
-                const copyText = document.getElementById('copyText');
-                copyText.innerText = 'คัดลอกแล้ว';
-                this.classList.remove('text-gray-700', 'bg-gray-100', 'hover:bg-gray-200');
-                this.classList.add('text-green-700', 'bg-green-100');
-                
-                setTimeout(() => {
-                    copyText.innerText = 'คัดลอกรหัส';
-                    this.classList.add('text-gray-700', 'bg-gray-100', 'hover:bg-gray-200');
-                    this.classList.remove('text-green-700', 'bg-green-100');
-                }, 2000);
-            }
-        });
+        const inMatEl = document.getElementById('inMat');
+        const matErrEl = document.getElementById('matError');
 
-        // รันครั้งแรกตอนโหลดหน้าเว็บ
+        if (mat.length !== 9) {
+            inMatEl.classList.add('border-red-300', 'focus:ring-red-500');
+            matErrEl.classList.remove('hidden');
+        } else {
+            inMatEl.classList.remove('border-red-300', 'focus:ring-red-500');
+            matErrEl.classList.add('hidden');
+        }
+
+        const inVenEl = document.getElementById('inVen');
+        const venErrEl = document.getElementById('venError');
+
+        if (ven.length !== 6) {
+            inVenEl.classList.add('border-red-300', 'focus:ring-red-500');
+            venErrEl.classList.remove('hidden');
+        } else {
+            inVenEl.classList.remove('border-red-300', 'focus:ring-red-500');
+            venErrEl.classList.add('hidden');
+        }
+
+        const imgEl = document.getElementById('barcodeImg');
+        const emptyEl = document.getElementById('emptyBarcode');
+        const warnEl = document.getElementById('warningMsg');
+        const copyBtn = document.getElementById('copyBtn');
+        const printBtn = document.getElementById('printBtn');
+
+        if (isValid) {
+            imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(code)}&scale=3&includetext=true&textyoffset=8&textsize=12&dpi=200`;
+
+            imgEl.classList.remove('hidden');
+            emptyEl.classList.add('hidden');
+            warnEl.classList.add('hidden');
+
+            copyBtn.disabled = false;
+            printBtn.disabled = false;
+
+            copyBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            printBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            copyBtn.dataset.code = code;
+        } else {
+            imgEl.src = '';
+            imgEl.classList.add('hidden');
+            emptyEl.classList.remove('hidden');
+            warnEl.classList.remove('hidden');
+
+            copyBtn.disabled = true;
+            printBtn.disabled = true;
+
+            copyBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            printBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            copyBtn.dataset.code = '';
+        }
+
+        lucide.createIcons();
+    }
+
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', updateApp);
+        input.addEventListener('change', updateApp);
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', async function () {
+        const code = this.dataset.code;
+
+        if (!code) return;
+
+        try {
+            await navigator.clipboard.writeText(code);
+            this.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> คัดลอกแล้ว';
+            lucide.createIcons();
+
+            setTimeout(() => {
+                this.innerHTML = '<i data-lucide="copy" class="w-4 h-4"></i> คัดลอกรหัส';
+                lucide.createIcons();
+            }, 1500);
+        } catch (error) {
+            alert('ไม่สามารถคัดลอกได้');
+        }
+    });
+
+    document.getElementById('printBtn').addEventListener('click', function () {
+        window.print();
+    });
+
+    window.addEventListener('DOMContentLoaded', function () {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+
+        document.getElementById('inDate').value = `${yyyy}-${mm}-${dd}`;
+
         updateApp();
         lucide.createIcons();
-    </script>
+    });
+               </script>
 </body>
 </html>
