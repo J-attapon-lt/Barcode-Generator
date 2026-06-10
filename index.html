@@ -181,19 +181,20 @@
             <div class="lg:col-span-7 space-y-6">
                 <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 h-full flex flex-col">
                     <div class="flex justify-between items-center mb-6 print:hidden">
-                        <h2 class="text-lg font-semibold text-gray-800">แสดงผล A5 (Print Preview)</h2>
+                        <span class="hidden md:inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+    READY FOR PRINT
+</span>
                         <div class="flex gap-2">
-                            <button id="copyBtn" class="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200">
-                                <i data-lucide="copy" class="w-4 h-4"></i> <span id="copyText">คัดลอกรหัส</span>
-                            </button>
-                            <button id="printBtn" class="flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700">
+                            <button id="copyBtn" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200">
+                              <button id="printBtn" class="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold transition-all bg-gradient-to-r from-blue-700 to-emerald-700 text-white hover:from-blue-800 hover:to-emerald-800 shadow-md">
                                 <i data-lucide="printer" class="w-4 h-4"></i> พิมพ์บาร์โค้ด
                             </button>
                         </div>
                     </div>
 
                     <!-- Label Canvas -->
-                    <div class="flex-1 flex items-center justify-center bg-gray-200 rounded-lg p-4 md:p-8 border border-gray-300 print:bg-white print:border-none print:p-0 overflow-auto">
+                    <div class="label-preview-bg flex-1 flex items-center justify-center rounded-2xl p-4 md:p-8 border border-slate-300 print:bg-white print:border-none print:p-0 overflow-auto">
                         <div class="label-container bg-white border-2 border-black w-full max-w-2xl text-black flex flex-col print:w-[100%] print:h-[95vh] print:max-w-none print:border-2 print:border-black print:mx-auto">
                             
                             <!-- Header Area -->
@@ -337,7 +338,8 @@
 
             if(isValid) {
                 // เพิ่ม textyoffset จาก 8 เป็น 18 เพื่อให้ตัวเลขเว้นระยะห่างลงมาด้านล่างมากขึ้น (เหมือนเว้นบรรทัด)
-                imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyonset=8&textsize=12&&dpi=200`;
+                imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyonset=8&textsize=12&dpi=200`;
+               // imgEl.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${code}&scale=3&includetext=true&textyonset=8&textsize=12&&dpi=200`;
                 imgEl.classList.remove('hidden');
                 emptyEl.classList.add('hidden');
                 warnEl.classList.add('hidden');
